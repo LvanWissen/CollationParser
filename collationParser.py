@@ -99,7 +99,7 @@ class CollationParser:
 
                 elif s_start == s_end and s_start not in self.decodestring:
 
-                    size = n_end - n_start
+                    size = n_end - n_start + 1
 
                     print('method2')
 
