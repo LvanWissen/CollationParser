@@ -6,220 +6,210 @@ STCN Collation Parser
 ```
 python .\collationParser.py
 
-π1 †-3†`SUP`12`LO` *`SUP`2`LO` a-e`SUP`12`LO` A-K`SUP`12`LO` 
-`SUP`2`LO`†`SUP`2`LO` χ1 L-2C`SUP`12`LO` 2D`SUP`2`LO` 2χ1 
-2E-3D`SUP`12`LO` 3E`SUP`4`LO` `SUP`2`LO`A`SUP`2`LO` 3χ1 3F`SUP`8`LO` 
-3G-4B`SUP`12`LO` 4C`SUP`4`LO` `SUP`2`LO`*`SUP`2`LO` 4χ1 4D`SUP`8`LO` 
-4E-4Z`SUP`12`LO` 5A`SUP`2`LO` 5χ1 5B-5S`SUP`12`LO` 5T`SUP`4`LO` 
-`SUP`3`LO`*`SUP`2`LO` 6χ1 5V`SUP`8`LO` 5X-6X`SUP`12`LO` 6Y`SUP`4`LO` 
-6Z`SUP`2`LO` 7χ1 7A-7S`SUP`12`LO` 7T`SUP`6`LO` `SUP`4`LO`*`SUP`2`LO` 
-8χ1 7V`SUP`6`LO` 7X-8I`SUP`12`LO` 8K`SUP`10`LO` `SUP`5`LO`*`SUP`2`LO` 
-9χ1 8L`SUP`2`LO` 8M-9D`SUP`12`LO` 9E`SUP`10`LO` 10χ1 11χ1 9G`SUP`2`LO` 
-9H-9V`SUP`12`LO` 9X`SUP`4`LO` (3E4, 9X4 blank)
+π1 †-3†`SUP`12`LO` *`SUP`2`LO` a-e`SUP`12`LO` A-K`SUP`12`LO` `SUP`2`LO`†`SUP`2`LO` χ1 L-2C`SUP`12`LO` 2D`SUP`2`LO` 2χ1 2E-3D`SUP`12`LO` 3E`SUP`4`LO` `SUP`2`LO`A`SUP`2`LO` 3χ1 3F`SUP`8`LO` 3G-4B`SUP`12`LO` 4C`SUP`4`LO` `SUP`2`LO`*`SUP`2`LO` 4χ1 4D`SUP`8`LO` 4E-4Z`SUP`12`LO` 5A`SUP`2`LO` 5χ1 5B-5S`SUP`12`LO` 5T`SUP`4`LO` `SUP`3`LO`*`SUP`2`LO` 6χ1 5V`SUP`8`LO` 5X-6X`SUP`12`LO` 6Y`SUP`4`LO` 6Z`SUP`2`LO` 7χ1 7A-7S`SUP`12`LO` 7T`SUP`6`LO` `SUP`4`LO`*`SUP`2`LO` 8χ1 7V`SUP`6`LO` 7X-8I`SUP`12`LO` 8K`SUP`10`LO` `SUP`5`LO`*`SUP`2`LO` 9χ1 8L`SUP`2`LO` 8M-9D`SUP`12`LO` 9E`SUP`10`LO` 10χ1 11χ1 9G`SUP`2`LO` 9H-9V`SUP`12`LO` 9X`SUP`4`LO` (3E4, 9X4 blank)
 
 {'ONGESIGNEERD': 'π1'}
 1
 
-{'FORMAAT': '12', 'KATERN_START': '†', 'KATERN_END': '3†'}
+{'KATERN_END': '3†', 'FORMAAT': '12', 'KATERN_START': '†'}
 n_start: 1 s_start: †
 n_end: 3 s_end: †
 method2
-12 2
-25
+12 3
+37
 
-{'KATERN_START': '*', 'FORMAAT': '2'}
-27
+{'FORMAAT': '2', 'KATERN_START': '*'}
+39
 
-{'FORMAAT': '12', 'KATERN_START': 'a', 'KATERN_END': 'e'}
+{'KATERN_END': 'e', 'FORMAAT': '12', 'KATERN_START': 'a'}
 n_start: 1 s_start: a
 n_end: 1 s_end: e
 method1
 12 5
-87
+99
 
-{'FORMAAT': '12', 'KATERN_START': 'A', 'KATERN_END': 'K'}
+{'KATERN_END': 'K', 'FORMAAT': '12', 'KATERN_START': 'A'}
 n_start: 1 s_start: A
 n_end: 1 s_end: K
 method1
 12 10
-207
+219
 
 {'FORMAAT': '2', 'KATERN_START': '†', 'HERHALING': '2'}
-209
+221
 
 {'ONGESIGNEERD': 'χ1'}
-210
+222
 
-{'FORMAAT': '12', 'KATERN_START': 'L', 'KATERN_END': '2C'}
+{'KATERN_END': '2C', 'FORMAAT': '12', 'KATERN_START': 'L'}
 n_start: 1 s_start: L
 n_end: 2 s_end: C
 method3
 12 17
-414
+426
 
-{'KATERN_START': '2D', 'FORMAAT': '2'}
-416
+{'FORMAAT': '2', 'KATERN_START': '2D'}
+428
 
 {'ONGESIGNEERD': '2χ1'}
-417
+429
 
-{'FORMAAT': '12', 'KATERN_START': '2E', 'KATERN_END': '3D'}
+{'KATERN_END': '3D', 'FORMAAT': '12', 'KATERN_START': '2E'}
 n_start: 2 s_start: E
 n_end: 3 s_end: D
 method3
 12 24
-705
+717
 
-{'KATERN_START': '3E', 'FORMAAT': '4'}
-709
+{'FORMAAT': '4', 'KATERN_START': '3E'}
+721
 
 {'FORMAAT': '2', 'KATERN_START': 'A', 'HERHALING': '2'}
-711
+723
 
 {'ONGESIGNEERD': '3χ1'}
-712
+724
 
-{'KATERN_START': '3F', 'FORMAAT': '8'}
-720
+{'FORMAAT': '8', 'KATERN_START': '3F'}
+732
 
-{'FORMAAT': '12', 'KATERN_START': '3G', 'KATERN_END': '4B'}
+{'KATERN_END': '4B', 'FORMAAT': '12', 'KATERN_START': '3G'}
 n_start: 3 s_start: G
 n_end: 4 s_end: B
 method3
 12 20
-960
+972
 
-{'KATERN_START': '4C', 'FORMAAT': '4'}
-964
+{'FORMAAT': '4', 'KATERN_START': '4C'}
+976
 
 {'FORMAAT': '2', 'KATERN_START': '*', 'HERHALING': '2'}
-966
+978
 
 {'ONGESIGNEERD': '4χ1'}
-967
+979
 
-{'KATERN_START': '4D', 'FORMAAT': '8'}
-975
+{'FORMAAT': '8', 'KATERN_START': '4D'}
+987
 
-{'FORMAAT': '12', 'KATERN_START': '4E', 'KATERN_END': '4Z'}
+{'KATERN_END': '4Z', 'FORMAAT': '12', 'KATERN_START': '4E'}
 n_start: 4 s_start: E
 n_end: 4 s_end: Z
 method3
 12 20
-1215
+1227
 
-{'KATERN_START': '5A', 'FORMAAT': '2'}
-1217
+{'FORMAAT': '2', 'KATERN_START': '5A'}
+1229
 
 {'ONGESIGNEERD': '5χ1'}
-1218
+1230
 
-{'FORMAAT': '12', 'KATERN_START': '5B', 'KATERN_END': '5S'}
+{'KATERN_END': '5S', 'FORMAAT': '12', 'KATERN_START': '5B'}
 n_start: 5 s_start: B
 n_end: 5 s_end: S
 method3
 12 17
-1422
+1434
 
-{'KATERN_START': '5T', 'FORMAAT': '4'}
-1426
+{'FORMAAT': '4', 'KATERN_START': '5T'}
+1438
 
 {'FORMAAT': '2', 'KATERN_START': '*', 'HERHALING': '3'}
-1428
+1440
 
 {'ONGESIGNEERD': '6χ1'}
-1429
+1441
 
-{'KATERN_START': '5V', 'FORMAAT': '8'}
-1437
+{'FORMAAT': '8', 'KATERN_START': '5V'}
+1449
 
-{'FORMAAT': '12', 'KATERN_START': '5X', 'KATERN_END': '6X'}
+{'KATERN_END': '6X', 'FORMAAT': '12', 'KATERN_START': '5X'}
 n_start: 5 s_start: X
 n_end: 6 s_end: X
 method3
 12 24
-1725
+1737
 
-{'KATERN_START': '6Y', 'FORMAAT': '4'}
-1729
+{'FORMAAT': '4', 'KATERN_START': '6Y'}
+1741
 
-{'KATERN_START': '6Z', 'FORMAAT': '2'}
-1731
+{'FORMAAT': '2', 'KATERN_START': '6Z'}
+1743
 
 {'ONGESIGNEERD': '7χ1'}
-1732
+1744
 
-{'FORMAAT': '12', 'KATERN_START': '7A', 'KATERN_END': '7S'}
+{'KATERN_END': '7S', 'FORMAAT': '12', 'KATERN_START': '7A'}
 n_start: 7 s_start: A
 n_end: 7 s_end: S
 method3
 12 18
-1948
+1960
 
-{'KATERN_START': '7T', 'FORMAAT': '6'}
-1954
+{'FORMAAT': '6', 'KATERN_START': '7T'}
+1966
 
 {'FORMAAT': '2', 'KATERN_START': '*', 'HERHALING': '4'}
-1956
+1968
 
 {'ONGESIGNEERD': '8χ1'}
-1957
+1969
 
-{'KATERN_START': '7V', 'FORMAAT': '6'}
-1963
+{'FORMAAT': '6', 'KATERN_START': '7V'}
+1975
 
-{'FORMAAT': '12', 'KATERN_START': '7X', 'KATERN_END': '8I'}
+{'KATERN_END': '8I', 'FORMAAT': '12', 'KATERN_START': '7X'}
 n_start: 7 s_start: X
 n_end: 8 s_end: I
 method3
 12 12
-2107
-
-{'KATERN_START': '8K', 'FORMAAT': '10'}
-2117
-
-{'FORMAAT': '2', 'KATERN_START': '*', 'HERHALING': '5'}
 2119
 
+{'FORMAAT': '10', 'KATERN_START': '8K'}
+2129
+
+{'FORMAAT': '2', 'KATERN_START': '*', 'HERHALING': '5'}
+2131
+
 {'ONGESIGNEERD': '9χ1'}
-2120
+2132
 
-{'KATERN_START': '8L', 'FORMAAT': '2'}
-2122
+{'FORMAAT': '2', 'KATERN_START': '8L'}
+2134
 
-{'FORMAAT': '12', 'KATERN_START': '8M', 'KATERN_END': '9D'}
+{'KATERN_END': '9D', 'FORMAAT': '12', 'KATERN_START': '8M'}
 n_start: 8 s_start: M
 n_end: 9 s_end: D
 method3
 12 17
-2326
-
-{'KATERN_START': '9E', 'FORMAAT': '10'}
-2336
-
-{'ONGESIGNEERD': '10χ1'}
-2337
-
-{'ONGESIGNEERD': '11χ1'}
 2338
 
-{'KATERN_START': '9G', 'FORMAAT': '2'}
-2340
+{'FORMAAT': '10', 'KATERN_START': '9E'}
+2348
 
-{'FORMAAT': '12', 'KATERN_START': '9H', 'KATERN_END': '9V'}
+{'ONGESIGNEERD': '10χ1'}
+2349
+
+{'ONGESIGNEERD': '11χ1'}
+2350
+
+{'FORMAAT': '2', 'KATERN_START': '9G'}
+2352
+
+{'KATERN_END': '9V', 'FORMAAT': '12', 'KATERN_START': '9H'}
 n_start: 9 s_start: H
 n_end: 9 s_end: V
 method3
 12 14
-2508
+2520
 
-{'KATERN_START': '9X', 'FORMAAT': '4'}
-2512
+{'FORMAAT': '4', 'KATERN_START': '9X'}
+2524
 
 {'COMMENTAAR': '3E4, 9X4 blank'}
 Commentaar: 3E4, 9X4 blank
-2512
-
-Folia: 2512
+2524
+Folia: 2524
 
 ```
