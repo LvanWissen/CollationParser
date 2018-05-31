@@ -175,19 +175,23 @@ class CollationParser:
                                                              size))
                 folia += int(e['FORMAAT']) * size
 
+            # Just one collate
             elif e['KATERN_START']:
                 folia += int(e['FORMAAT'])
-                size = int(e['FORMAAT'])
+                size = 1
 
+            # Unsigned comment
             elif e['ONGESIGNEERD']:
                 folia += int(re.split('χ|π', e['ONGESIGNEERD'], 1)[1])
                 size = int(re.split('χ|π', e['ONGESIGNEERD'], 1)[1])
                 e['FORMAAT'] = size
 
+            # Correction
             elif e['CORRECTIE']:
                 folia -= 1
                 size = -1
 
+            # Further comments
             elif e['COMMENTAAR']:
                 logging.info('Commentaar: {}'.format(e['COMMENTAAR']))
 
