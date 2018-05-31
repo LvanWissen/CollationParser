@@ -51,26 +51,37 @@ class CollationParser:
         decodestring = "abcdefghiklmnopqrstvxyz"  # j, u and w removed
         self.decodestring = decodestring + decodestring.upper()
 
-    def parse(self, s):
+    def parse(self, s, use_parselist=False):
         """
+        Parse function. Call with collation formula (string) as argument. It
+        returns the amount of folia. Or specify `use_parselist` if you want
+        more information on the individual collates. Then the output is a
+        tuple of folia, parselist (list with dicts). 
 
         :param s: collation formula (str)
+        :param parselist:   return parselist with parse information (e.g. for
+                            web interface or debug) as second variable in
+                            return statement. (default False)
         :return: amount of folia (int)
         """
 
         folia = 0
         katernen = 0
 
+        # To keep track of collates and sizes
+        parselist = []
 
         logging.info(s)
         
 
-        r = re.compile("""
-                       (?P<ONGESIGNEERD>(?:(?:\d+)?[χπ]\d{1,2})+)|
-                       (?:`SUP`(?P<DUBBEL>[χπ]+?)`LO`(?P<DUBBELKATERN>.+?) )?(?:`SUP`(?P<HERHALING>[\dχπ]+?)`LO`)?(?P<KATERN_START>[^ `\n]+?)(?:-(?P<KATERN_END>[^ `\n]+?))?(?:`SUP`(?P<FORMAAT>\d+?)`LO`)+?|
-                       (?:\((?P<CORRECTIE>-.*?)\))|
-                       (?:\((?P<COMMENTAAR>[^-]*?)\))
-                       """, re.VERBOSE)
+        r = re.compile(
+            """
+            (?P<ONGESIGNEERD>(?:(?:\d+)?[χπ]\d{1,2})+)|
+            (?:`SUP`(?P<DUBBEL>[χπ]+?)`LO`(?P<DUBBELKATERN>.+?) )?(?:`SUP`(?P<HERHALING>[\dχπ]+?)`LO`)?(?P<KATERN_START>[^ `\n]+?)(?:-(?P<KATERN_END>[^ `\n]+?))?(?:`SUP`(?P<FORMAAT>\d+?)`LO`)+?|
+            (?:\((?P<CORRECTIE>-.*?)\))|
+            (?:\((?P<COMMENTAAR>[^-]*?)\))
+            """, re.VERBOSE
+            )
 
         entries = [m.groupdict() for m in r.finditer(s)]
 
@@ -84,15 +95,19 @@ class CollationParser:
 
                 brackets = '()[]'
 
-                if e['KATERN_START'][0] in brackets and e['KATERN_START'][-1] in brackets:
+                if (e['KATERN_START'][0] in brackets 
+                    and e['KATERN_START'][-1] in brackets):
                     e['KATERN_START'] = e['KATERN_START'][1:-1]
-                elif e['KATERN_START'][0] in brackets and e['KATERN_END'][-1] in brackets:
+                elif (e['KATERN_START'][0] in brackets 
+                      and e['KATERN_END'][-1] in brackets):
                     e['KATERN_START'] = e['KATERN_START'][1:]
                     e['KATERN_END'] = e['KATERN_END'][:-1]
-                if e['KATERN_END'][0] in brackets and e['KATERN_END'][-1] in brackets:
+                if (e['KATERN_END'][0] in brackets 
+                    and e['KATERN_END'][-1] in brackets):
                     e['KATERN_END'] = e['KATERN_END'][1:-1]
 
-                n_start, s_start = re.findall('(\d+)?([^ ]+)?', e['KATERN_START'])[0]
+                n_start, s_start = re.findall('(\d+)?([^ ]+)?', 
+                                              e['KATERN_START'])[0]
                 n_end, s_end = re.findall('(\d+)?([^ ]+)?', e['KATERN_END'])[0]
 
                 if not n_start:
@@ -104,12 +119,13 @@ class CollationParser:
                 else:
                     n_end = int(n_end)
 
-                logging.info('n_start: {} \t s_start: {}'.format(n_start, s_start))
+                logging.info('n_start: {} \t s_start: {}'.format(n_start, 
+                                                                 s_start))
                 logging.info('n_end: {} \t s_end: {}'.format(n_end, s_end))
 
                 # Begin and end collation mark
-                if e['KATERN_START'] in self.decodestring 
-                    and e['KATERN_END'] in self.decodestring:
+                if (e['KATERN_START'] in self.decodestring 
+                    and e['KATERN_END'] in self.decodestring):
                     
                     start = self.decodestring.index(e['KATERN_START'].lower())
                     end = self.decodestring.index(e['KATERN_END'].lower())
@@ -118,18 +134,18 @@ class CollationParser:
                     logging.debug('Method: Begin and end collation mark')
 
                 # Just one collation mark in group
-                elif s_start == s_end 
-                    and s_start not in self.decodestring:
+                elif (s_start == s_end 
+                      and s_start not in self.decodestring):
                     
                     size = n_end - n_start + 1 #  inclusive
                     
                     logging.debug('Method: Just one collation mark in group')
 
                 # If the group exceeds the alphabet and starts over
-                elif s_start in self.decodestring 
-                    and s_end in self.decodestring 
-                    and s_start != '' 
-                    and s_end != '':
+                elif (s_start in self.decodestring 
+                      and s_end in self.decodestring 
+                      and s_start != '' 
+                      and s_end != ''):
 
                     start = self.decodestring.index(s_start.lower())
                     end = self.decodestring.index(s_end.lower())
@@ -146,7 +162,9 @@ class CollationParser:
                         logging.info(s)
                         raise EnvironmentError
 
-                    logging.debug('Method: Group exceeds the alphabet and starts over')
+                    logging.debug(
+                        'Method: Group exceeds the alphabet and starts over'
+                        )
 
                 # In case of no letters
                 elif s_start == '' and s_end == '':
@@ -154,28 +172,39 @@ class CollationParser:
 
                     logging.debug('Method: no letters')
 
-
-                logging.info("Formaat: {}\tOmvang:{}".format(int(e['FORMAAT']), size))
+                logging.info("Formaat: {}\tOmvang:{}".format(int(e['FORMAAT']),
+                                                             size))
                 folia += int(e['FORMAAT']) * size
 
             elif e['KATERN_START']:
                 folia += int(e['FORMAAT'])
+                size = int(e['FORMAAT'])
 
             elif e['ONGESIGNEERD']:
                 folia += int(re.split('χ|π', e['ONGESIGNEERD'], 1)[1])
+                size = int(re.split('χ|π', e['ONGESIGNEERD'], 1)[1])
+                e['FORMAAT'] = size
 
             elif e['CORRECTIE']:
                 folia -= 1
+                size = -1
 
             elif e['COMMENTAAR']:
                 logging.info('Commentaar: {}'.format(e['COMMENTAAR']))
 
             logging.info("Cumulatief aantal: {}\n---".format(folia))
 
+            # for parselist information (e.g. in the web interface)
+            if e['FORMAAT']:
+                e['OMVANG'] = size * int(e['FORMAAT'])
+            parselist.append(e)
+
         logging.info("\nFolia: {}".format(folia))
 
-        return folia
-
+        if use_parselist:
+            return folia, parselist
+        else:
+            return folia
 
 if __name__ == "__main__":
     cp = CollationParser(verbose=True)
