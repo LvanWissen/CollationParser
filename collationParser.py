@@ -66,7 +66,6 @@ class CollationParser:
         """
 
         folia = 0
-        katernen = 0
 
         # To keep track of collates and sizes
         parselist = []
