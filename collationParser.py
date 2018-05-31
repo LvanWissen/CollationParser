@@ -31,6 +31,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 """
 
+import logging
 import re
 
 
@@ -43,7 +44,9 @@ class CollationParser:
     def __init__(self, verbose=False):
         """
         """
-        self.verbose = verbose
+
+        if verbose:
+            logging.basicConfig(format='%(message)s', level=logging.DEBUG)
 
         decodestring = "abcdefghiklmnopqrstuvxyz"  # j and w removed
         self.decodestring = decodestring + decodestring.upper()
@@ -59,8 +62,8 @@ class CollationParser:
         katernen = 0
 
 
-        if self.verbose:
-            print(s)
+        logging.info(s)
+        
 
         r = re.compile("""
                        (?P<ONGESIGNEERD>(?:(?:\d+)?[χπ]\d{1,2})+)|
@@ -74,9 +77,8 @@ class CollationParser:
         for e in entries:
             size = 0
 
-            if self.verbose:
-                print()
-                print({k:v for k,v in e.items() if v is not None})
+            logging.info("")
+            logging.info({k:v for k,v in e.items() if v is not None})
 
             if e['KATERN_START'] and e['KATERN_END']:
 
@@ -101,24 +103,22 @@ class CollationParser:
                     n_end = 1
                 else:
                     n_end = int(n_end)
-                if self.verbose:
-                    print('n_start:', n_start, 's_start:', s_start)
-                    print('n_end:', n_end, 's_end:', s_end)
+
+                logging.info('n_start: {} \t s_start: {}'.format(n_start, s_start))
+                logging.info('n_end: {} \t s_end: {}'.format(n_end, s_end))
 
                 if e['KATERN_START'] in self.decodestring and e['KATERN_END'] in self.decodestring:
                     start = self.decodestring.index(e['KATERN_START'].lower())
                     end = self.decodestring.index(e['KATERN_END'].lower())
                     size = end - start + 1
 
-                    if self.verbose:
-                        print('method1')
+                    logging.debug('method1')
 
                 elif s_start == s_end and s_start not in self.decodestring:
 
                     size = n_end - n_start + 1  #inclusive
 
-                    if self.verbose:
-                        print('method2')
+                    logging.debug('method2')
 
                 elif s_start in self.decodestring and s_end in self.decodestring and s_start != '' and s_end != '':
                     start = self.decodestring.index(s_start.lower())
@@ -133,20 +133,17 @@ class CollationParser:
                     elif end > start:
                         size = (end - start) + 24 * (n_end - n_start)
                     else:
-                        print(s)
+                        logging.info(s)
                         raise EnvironmentError
 
-                    if self.verbose:
-                        print('method3')
+                    logging.debug('method3')
                 elif s_start == '' and s_end == '':
                     size = n_end - n_start + 1
 
-                    if self.verbose:
-                        print('method4')
+                    logging.debug('method4')
 
 
-                if self.verbose:
-                    print(int(e['FORMAAT']), size)
+                logging.info("{} {}".format(int(e['FORMAAT']), size))
                 folia += int(e['FORMAAT']) * size
 
             elif e['KATERN_START']:
@@ -159,16 +156,11 @@ class CollationParser:
                 folia -= 1
 
             elif e['COMMENTAAR']:
-                if self.verbose:
-                    print('Commentaar:', e['COMMENTAAR'])
+                logging.info('Commentaar: {}'.format(e['COMMENTAAR']))
 
-            if self.verbose:
-                print(folia)
+            logging.info("Cumulatief aantal: {}\n---".format(folia))
 
-        if self.verbose:
-            print("Folia:", folia)
-            print()
-
+        logging.info("\nFolia: {}".format(folia))
 
         return folia
 
