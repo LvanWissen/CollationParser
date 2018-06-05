@@ -149,14 +149,16 @@ class CollationParser:
                     start = self.decodestring.index(s_start.lower())
                     end = self.decodestring.index(s_end.lower())
 
+                    logging.debug("Start index: {} \nEnd index: {}".format(start, end))
+
                     if end < start:
                         size = 23 - (start - end) * (n_end - n_start) + 1
                     elif n_end == n_start:
                         size = end - start + 1
                     elif end == start:
-                        size = 23 * (n_end - n_start)
+                        size = 23 * (n_end - n_start) + 1 # inclusive
                     elif end > start:
-                        size = (end - start) + 23 * (n_end - n_start)
+                        size = (end - start + 1) + 23 * (n_end - n_start)
                     else:
                         logging.info(s)
                         raise EnvironmentError
