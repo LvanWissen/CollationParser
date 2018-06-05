@@ -1,7 +1,10 @@
 # CollationParser
 STCN Collation Parser
 
-Demo and flask webserver available in [separate repository](https://github.com/LvanWissen/collatieparser-docker).
+Demo and flask webserver available in [separate repository](https://github.com/LvanWissen/collatieparser-docker). Presented at NBV 2018, June 1st 2018, Vrije Universiteit Amsterdam. 
+
+## Questions / requests / bugs?
+[E-mail](mailto:leon@vwissen.nl)! 
 
 ## How to use
 
