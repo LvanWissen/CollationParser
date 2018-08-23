@@ -78,7 +78,7 @@ class CollationParser:
 
         r = re.compile(
             r"""
-            (?P<ONGESIGNEERD>(?:(?:\d+)?\[?[χπa-zA-Z]+]?\d{1,2})+)|
+            (?P<ONGESIGNEERD>(?:(?:\d+)?\[?[χπa-zA-Z]+]?(?:\d{1,2}(?:,?\d?)+)+)+)|
             (?:`SUP`(?P<DUBBEL>[χπ]+?)`LO`(?P<DUBBELKATERN>.+?) )?(?:`SUP`(?P<HERHALING>[\dχπ]+?)`LO`)?(?P<KATERN_START>[^ `\n]+?)(?:-(?P<KATERN_END>[^ `\n]+?))?(?:`SUP`(?P<FORMAAT>(?:\d+?)|(?:\d+?(?:\/\d)+?))`LO`)+?|
             (?:\((?P<CORRECTIE>-.*?)\))|
             (?:\((?P<COMMENTAAR>[^-]*?)\))
@@ -213,8 +213,13 @@ class CollationParser:
 
             # Unsigned comment
             elif e['ONGESIGNEERD']:
-                folia += int(re.split(r'[χπ\[a-zA-Z\]]+', e['ONGESIGNEERD'], 1)[1])
-                size = int(re.split(r'[χπ\[a-zA-Z\]]+', e['ONGESIGNEERD'], 1)[1])
+
+                if ',' in e['ONGESIGNEERD']:
+                    size = int(e['ONGESIGNEERD'].split(',')[-1])
+                else:
+                    size = int(re.split(r'[χπ\[a-zA-Z\]]+', e['ONGESIGNEERD'], 1)[1])
+
+                folia += size
                 e['FORMAAT'] = size
 
             # Correction
