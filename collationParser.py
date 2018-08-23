@@ -78,10 +78,28 @@ class CollationParser:
 
         r = re.compile(
             r"""
-            (?P<ONGESIGNEERD>(?:(?:\d+)?\[?[χπa-zA-Z]+]?(?:\d{1,2}(?:,?\d?)+)+)+)|
-            (?:`SUP`(?P<DUBBEL>[χπ]+?)`LO`(?P<DUBBELKATERN>.+?) )?(?:`SUP`(?P<HERHALING>[\dχπ]+?)`LO`)?(?P<KATERN_START>[^ `\n]+?)(?:-(?P<KATERN_END>[^ `\n]+?))?(?:`SUP`(?P<FORMAAT>(?:\d+?)|(?:\d+?(?:\/\d)+?))`LO`)+?|
-            (?:\((?P<CORRECTIE>-.*?)\))|
-            (?:\((?P<COMMENTAAR>[^-]*?)\))
+# Met informatie erbij
+  
+# Zoek eerst naar een ongesigneerd vel met de vorm (cijfer)([letter])(cijfer) of (letter)(cijfer,cijfer,cijfer) of varianten hiervan.          
+(?P<ONGESIGNEERD>(?:(?:\d+)?\[?[χπa-zA-Z]+]?(?:\d{1,2}(?:,?\d?)+)+)+)|
+
+# Zoek daarna naar dubbelkaternen en herhalingen.
+(?:`SUP`(?P<DUBBEL>[χπ]+?)`LO`(?P<DUBBELKATERN>.+?) )?(?:`SUP`(?P<HERHALING>[\dχπ]+?)`LO`)?
+
+# Zoek daarna naar een normaal katern met een startletter en mogelijk een eindletter. 
+(?P<KATERN_START>[^ `\n]+?)(?:-(?P<KATERN_END>[^ `\n]+?))?
+
+# Dit wordt altijd afgesloten met een formaatnotatie die bestaat uit één of meerdere cijfers.
+(?:`SUP`(?P<FORMAAT>(?:\d+?)|
+
+# Maar de notatie kan ook een slash (/) bevatten, die aangeeft dat de katernen volgens deze formaten (e.g. 8/4) ingebonden zijn.  
+(?:\d+?(?:\/\d)+?))`LO`)+?|
+
+# Eventueel is er een correctienotatie, waarbij een blad van een katern ontbreekt.
+(?:\((?P<CORRECTIE>-.*?)\))|
+
+# En als er nog commentaar toegevoegd is, dan wordt dat ook meegenomen. 
+(?:\((?P<COMMENTAAR>[^-]*?)\))
             """, re.VERBOSE
             )
 
