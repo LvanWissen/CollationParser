@@ -84,10 +84,10 @@ class CollationParser:
 (?P<ONGESIGNEERD>(?:(?:\d+)?\[?[χπa-zA-Z]+]?(?:\d{1,2}(?:,?\d?)+)+)+)|
 
 # Zoek daarna naar dubbelkaternen en herhalingen.
-(?:`SUP`(?P<DUBBEL>[χπ]+?)`LO`(?P<DUBBELKATERN>.+?) )?(?:`SUP`(?P<HERHALING>[\dχπ]+?)`LO`)?
+(?:`SUP`(?P<DUBBEL>[χπ]+?)`LO`(?P<DUBBELKATERN>[^\d\s]+?) )?(?:`SUP`(?P<HERHALING>[\dχπ]+?)`LO`)?
 
 # Zoek daarna naar een normaal katern met een startletter en mogelijk een eindletter. 
-(?P<KATERN_START>[^ `\n]+?)(?:-(?P<KATERN_END>[^ `\n]+?))?
+(?P<KATERN_START>[^ `\"\n]+?)(?:-(?P<KATERN_END>[^ `\n]+?))?
 
 # Dit wordt altijd afgesloten met een formaatnotatie die bestaat uit één of meerdere cijfers.
 (?:`SUP`(?P<FORMAAT>(?:\d+?)|
@@ -126,9 +126,20 @@ class CollationParser:
                     and e['KATERN_END'][-1] in brackets):
                     e['KATERN_END'] = e['KATERN_END'][1:-1]
 
-                n_start, s_start = re.findall(r'(\d+)?([^ ]+)?',
-                                              e['KATERN_START'])[0]
-                n_end, s_end = re.findall(r'(\d+)?([^ ]+)?', e['KATERN_END'])[0]
+                # Example: <***>1 and <***>38
+                if '<' in e['KATERN_START'] and '>' in e['KATERN_START']:
+                    s_start, n_start = re.findall(r'(?:<([^ ]+)>)?(\d+)?',
+                                                  e['KATERN_START'])[0]
+                else:
+                    n_start, s_start = re.findall(r'(\d+)?([^ ]+)?',
+                                                e['KATERN_START'])[0]
+
+                if '<' in e['KATERN_END'] and '>' in e['KATERN_END']:
+                    s_end, n_end = re.findall(r'(?:<([^ ]+)>)?(\d+)?',
+                                                  e['KATERN_END'])[0]
+                else:
+                    n_end, s_end = re.findall(r'(\d+)?([^ ]+)?', e['KATERN_END'])[0]
+
 
                 if not n_start:
                     n_start = 1
@@ -150,10 +161,22 @@ class CollationParser:
                     decodestring = self.decodestring[:23]
 
                     if n_start == n_end:
-                        letters = decodestring[decodestring.index(s_start.lower()):decodestring.index(s_end.lower()) + 1]
+                        if s_start == s_end and '*' in s_start:
+                            letters = ['*', '**'] # correct?
+                        else:
+                            letters = decodestring[decodestring.index(s_start.lower()):decodestring.index(s_end.lower()) + 1]
                     elif n_end > n_start:
+                        if s_start == s_end and ('*' in s_start or s_start == ''):
+                            letters = '*' * (n_end - n_start)
+                        else:
+                            letters = decodestring[decodestring.index(s_start.lower()):] + decodestring * (n_end - n_start -1) + decodestring[:decodestring.index(s_end.lower())+1]
+                    elif n_end < n_start and n_end == 0:
+                        n_end = n_start #guess
+                        s_end = 'O' #typo?
                         letters = decodestring[decodestring.index(s_start.lower()):] + decodestring * (n_end - n_start -1) + decodestring[:decodestring.index(s_end.lower())+1]
-                        
+                    else:
+                        logging.info('Cannot parse {s} ({e})'.format(s=s, e=e))
+
                     dummycollates = zip(letters, cycle(changing_sizes))
 
                     for _, c_size in dummycollates:
@@ -226,14 +249,20 @@ class CollationParser:
 
             # Just one collate
             elif e['KATERN_START']:
-                folia += int(e['FORMAAT'])
+                try:
+                    folia += int(e['FORMAAT'])
+                except ValueError:
+                    logging.info('Cannot parse {s} ({e})'.format(s=s, e=e))
                 size = 1
 
             # Unsigned comment
             elif e['ONGESIGNEERD']:
 
                 if ',' in e['ONGESIGNEERD']:
-                    size = int(e['ONGESIGNEERD'].split(',')[-1])
+                    try:
+                        size = int(e['ONGESIGNEERD'].split(',')[-1])
+                    except ValueError:
+                        size = int(re.split(r'[χπ\[a-zA-Z\]]+', e['ONGESIGNEERD'].split(',')[0], 1)[1])
                 else:
                     size = int(re.split(r'[χπ\[a-zA-Z\]]+', e['ONGESIGNEERD'], 1)[1])
 
@@ -253,7 +282,11 @@ class CollationParser:
 
             # for parselist information (e.g. in the web interface)
             if e['FORMAAT']:
-                e['OMVANG'] = size * int(e['FORMAAT'])
+                try:
+                    e['OMVANG'] = size * int(e['FORMAAT'])
+                except ValueError:
+                    logging.info('Cannot parse {s} ({e})'.format(s=s, e=e))
+
             parselist.append(e)
 
         logging.info("\nFolia: {}".format(folia))
