@@ -81,7 +81,7 @@ class CollationParser:
 # Met informatie erbij
   
 # Zoek eerst naar een ongesigneerd vel met de vorm (cijfer)([letter])(cijfer) of (letter)(cijfer,cijfer,cijfer) of varianten hiervan.          
-(?P<ONGESIGNEERD>(?:(?:\d+)?\[?[χ*πa-zA-Z]+]?(?:\d{1,2}(?:,?\d?)+)+)+)|
+(?:(?<!-)(?P<ONGESIGNEERD>(?:(?:\d+)?\[?[χ*πa-zA-Z]+]?(?:\d{1,2}(?:,?\d?)+)+)+))|
 
 # Zoek daarna naar dubbelkaternen en herhalingen.
 (?:`SUP`(?P<DUBBEL>[χπ]+?)`LO`(?P<DUBBELKATERN>[^\d\s]+?) )?(?:`SUP`(?P<HERHALING>[\dχπ]+?)`LO`)?
@@ -94,6 +94,9 @@ class CollationParser:
 
 # Maar de notatie kan ook een slash (/) bevatten, die aangeeft dat de katernen volgens deze formaten (e.g. 8/4) ingebonden zijn.  
 (?:\d+?(?:\/\d+)+?))`LO`)+?|
+
+# Er kunnen ook losse gesigneerde bladen zijn
+(?:(?P<GESIGNEERDE_LOSSE_BLADEN>(?P<KATERN_START_LOS>[^# `\"\n]+?)(?:-(?P<KATERN_END_LOS>[^ `\n]+?))?))1|
 
 # Eventueel is er een correctienotatie, waarbij een blad van een katern ontbreekt.
 (?:\((?P<CORRECTIE>-.*?)\))|
@@ -270,6 +273,20 @@ class CollationParser:
                 folia += size
                 e['OMVANG'] = size
 
+            elif e['GESIGNEERDE_LOSSE_BLADEN']:
+
+                if (e['KATERN_START_LOS'] in self.decodestring
+                    and e['KATERN_END_LOS'] in self.decodestring):
+
+                    start = self.decodestring.index(e['KATERN_START_LOS'].lower())
+                    end = self.decodestring.index(e['KATERN_END_LOS'].lower())
+                    size = end - start + 1 #  inclusive
+
+                    folia += size
+
+                    logging.debug('Method: Begin and end collation mark of unsigned leaves')
+
+
             # Correction
             elif e['CORRECTIE']:
                 folia -= 1
@@ -307,7 +324,9 @@ if __name__ == "__main__":
 
     # print(cp.parse("*1",  use_parselist=True))
 
-    print(cp.parse("[*]1 2*1 3*1 and 67 engraved folia",  use_parselist=True))
+    # print(cp.parse("[*]1 2*1 3*1 and 67 engraved folia",  use_parselist=True))
+
+    print(cp.parse("π1,2 *1,2,3 A-H1 and engraved folia", use_parselist=True))
 
 
 
