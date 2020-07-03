@@ -81,7 +81,7 @@ class CollationParser:
 # Met informatie erbij
   
 # Zoek eerst naar een ongesigneerd vel met de vorm (cijfer)([letter])(cijfer) of (letter)(cijfer,cijfer,cijfer) of varianten hiervan.          
-(?P<ONGESIGNEERD>(?:(?:\d+)?\[?[χπa-zA-Z]+]?(?:\d{1,2}(?:,?\d?)+)+)+)|
+(?P<ONGESIGNEERD>(?:(?:\d+)?\[?[χ*πa-zA-Z]+]?(?:\d{1,2}(?:,?\d?)+)+)+)|
 
 # Zoek daarna naar dubbelkaternen en herhalingen.
 (?:`SUP`(?P<DUBBEL>[χπ]+?)`LO`(?P<DUBBELKATERN>[^\d\s]+?) )?(?:`SUP`(?P<HERHALING>[\dχπ]+?)`LO`)?
@@ -263,9 +263,9 @@ class CollationParser:
                     try:
                         size = int(e['ONGESIGNEERD'].split(',')[-1])
                     except ValueError:
-                        size = int(re.split(r'[χπ\[a-zA-Z\]]+', e['ONGESIGNEERD'].split(',')[0], 1)[1])
+                        size = int(re.split(r'[χ*π\[a-zA-Z\]]+', e['ONGESIGNEERD'].split(',')[0], 1)[1])
                 else:
-                    size = int(re.split(r'[χπ\[a-zA-Z\]]+', e['ONGESIGNEERD'], 1)[1])
+                    size = int(re.split(r'[χ*π\[a-zA-Z\]]+', e['ONGESIGNEERD'], 1)[1])
 
                 folia += size
                 e['OMVANG'] = size
