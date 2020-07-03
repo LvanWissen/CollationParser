@@ -113,17 +113,18 @@ class CollationParser:
 
             if e['KATERN_START'] and e['KATERN_END']:
 
-                brackets = '()[]'
+                openingbrackets = '(['
+                closingbrackets = ')]'
 
-                if (e['KATERN_START'][0] in brackets
-                    and e['KATERN_START'][-1] in brackets):
+                if (e['KATERN_START'][0] in openingbrackets
+                    and e['KATERN_START'][-1] in closingbrackets):
                     e['KATERN_START'] = e['KATERN_START'][1:-1]
-                elif (e['KATERN_START'][0] in brackets
-                      and e['KATERN_END'][-1] in brackets):
+                elif (e['KATERN_START'][0] in openingbrackets
+                      and e['KATERN_END'][-1] in closingbrackets):
                     e['KATERN_START'] = e['KATERN_START'][1:]
                     e['KATERN_END'] = e['KATERN_END'][:-1]
-                if (e['KATERN_END'][0] in brackets
-                    and e['KATERN_END'][-1] in brackets):
+                if (e['KATERN_END'][0] in openingbrackets
+                    and e['KATERN_END'][-1] in closingbrackets):
                     e['KATERN_END'] = e['KATERN_END'][1:-1]
 
                 # Example: <***>1 and <***>38
@@ -301,7 +302,17 @@ if __name__ == "__main__":
 
     # Examples
     # print(cp.parse("1#π1,2,3 A-H`SUP`12/8/4`LO`", use_parselist=True) )
-    print(cp.parse("A-D`SUP`6/12`LO` (D12 blank)",  use_parselist=True))
+
+    # print(cp.parse(")(-2)(`SUP`2`LO`",  use_parselist=True))
+
+    # print(cp.parse("*1",  use_parselist=True))
+
+    print(cp.parse("[*]1 2*1 3*1 and 67 engraved folia",  use_parselist=True))
+
+
+
+
+
     # cp.parse("π1 †-3†`SUP`12`LO` *`SUP`2`LO` a-e`SUP`12`LO` A-K`SUP`12`LO` `SUP`2`LO`†`SUP`2`LO` χ1 L-2C`SUP`12`LO` 2D`SUP`2`LO` 2χ1 2E-3D`SUP`12`LO` 3E`SUP`4`LO` `SUP`2`LO`A`SUP`2`LO` 3χ1 3F`SUP`8`LO` 3G-4B`SUP`12`LO` 4C`SUP`4`LO` `SUP`2`LO`*`SUP`2`LO` 4χ1 4D`SUP`8`LO` 4E-4Z`SUP`12`LO` 5A`SUP`2`LO` 5χ1 5B-5S`SUP`12`LO` 5T`SUP`4`LO` `SUP`3`LO`*`SUP`2`LO` 6χ1 5V`SUP`8`LO` 5X-6X`SUP`12`LO` 6Y`SUP`4`LO` 6Z`SUP`2`LO` 7χ1 7A-7S`SUP`12`LO` 7T`SUP`6`LO` `SUP`4`LO`*`SUP`2`LO` 8χ1 7V`SUP`6`LO` 7X-8I`SUP`12`LO` 8K`SUP`10`LO` `SUP`5`LO`*`SUP`2`LO` 9χ1 8L`SUP`2`LO` 8M-9D`SUP`12`LO` 9E`SUP`10`LO` 10χ1 11χ1 9G`SUP`2`LO` 9H-9V`SUP`12`LO` 9X`SUP`4`LO` (3E4, 9X4 blank)")
     #cp.parse("*`SUP`4`LO` A-5S`SUP`4`LO` (A)-(2D)`SUP`4`LO` *`SUP`4`LO`(-*4) 2*`SUP`4`LO` A-2F`SUP`4`LO` 2G1 *`SUP`4`LO` A-3R`SUP`4`LO` π`SUP`2`LO` *-4*`SUP`12`LO` 5*`SUP`10`LO` A-2F`SUP`12`LO` (2F11,12 blank) π1 2π`SUP`2`LO` A-2I`SUP`8`LO` (2I7,8 blank) *-2*`SUP`4`LO` A-3R`SUP`4`LO` */2*`SUP`4`LO` 3*-9*`SUP`4`LO` a`SUP`4`LO` b`SUP`4`LO`(-b4) A-5C`SUP`4`LO` (5C4 blank) <***>`SUP`2`LO` A-2E`SUP`4`LO` 2F1 2G-2H`SUP`2`LO` A`SUP`4`LO`(A1+χ1) B-4C`SUP`4`LO` 4D`SUP`6`LO` 2*-3*`SUP`4`LO` a-c`SUP`4`LO` d`SUP`2`LO` e-r`SUP`4`LO` s`SUP`2`LO` t-y`SUP`4`LO` z`SUP`6`LO` (4D6 blank)")
     #cp.parse('[A-B]`SUP`4`LO`')
