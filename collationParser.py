@@ -87,13 +87,16 @@ class CollationParser:
 (?:`SUP`(?P<DUBBEL>[χπ]+?)`LO`(?P<DUBBELKATERN>[^\d\s]+?) )?(?:`SUP`(?P<HERHALING>[\dχπ]+?)`LO`)?
 
 # Zoek daarna naar een normaal katern met een startletter en mogelijk een eindletter. 
-(?P<KATERN_START>[^ `\"\n]+?)(?:-(?P<KATERN_END>[^ `\n]+?))?
+(?P<KATERN_START>(?:[^ `\"\n]+?)|(?:\)\())(?:-(?P<KATERN_END>[^ `\n]+?))?
 
 # Dit wordt altijd afgesloten met een formaatnotatie die bestaat uit één of meerdere cijfers.
 (?:`SUP`(?P<FORMAAT>(?:\d+?)|
 
 # Maar de notatie kan ook een slash (/) bevatten, die aangeeft dat de katernen volgens deze formaten (e.g. 8/4) ingebonden zijn.  
-(?:\d+?(?:\/\d+)+?))`LO`)+?|
+(?:\d+?(?:\/\d+)+?))`LO`(?!\)))+?|
+
+# Of er zijn bladen toegevoegd (aangeduid met een plus (+) tussen haakjes)
+(?:\((?P<TOEVOEGING>[^()]*?\+[^()]*?)\))|
 
 # Er kunnen ook losse gesigneerde bladen zijn
 (?:(?P<GESIGNEERDE_LOSSE_BLADEN>(?P<KATERN_START_LOS>[^# `\"\n]+?)(?:-(?P<KATERN_END_LOS>[^ `\n]+?))?))1|
@@ -102,7 +105,7 @@ class CollationParser:
 (?:\((?P<CORRECTIE>-.*?)\))|
 
 # En als er nog commentaar toegevoegd is, dan wordt dat ook meegenomen. 
-(?:\((?P<COMMENTAAR>[^-]*?)\))
+(?:\((?P<COMMENTAAR>[^-+]*?)\))
             """, re.VERBOSE
             )
 
@@ -286,6 +289,25 @@ class CollationParser:
 
                     logging.debug('Method: Begin and end collation mark of unsigned leaves')
 
+            elif e['TOEVOEGING']:
+
+                # e.g. (*1+2π`SUP`2`LO`)
+
+                if e['TOEVOEGING'].startswith('('):
+                    toevoeging = e['TOEVOEGING'][1:]
+                if e['TOEVOEGING'].endswith(')'):
+                    toevoeging = e['TOEVOEGING'][:-1]
+                else:
+                    toevoeging = e['TOEVOEGING']
+
+                if '+' in toevoeging:
+                    toevoeging = toevoeging.split('+')[1]
+
+                size = self.parse(toevoeging)  # recursive!
+
+                folia += size
+
+                logging.debug('Method: Addition and recursive parse')
 
             # Correction
             elif e['CORRECTIE']:
@@ -326,7 +348,7 @@ if __name__ == "__main__":
 
     # print(cp.parse("[*]1 2*1 3*1 and 67 engraved folia",  use_parselist=True))
 
-    print(cp.parse("π1,2 *1,2,3 A-H1 and engraved folia", use_parselist=True))
+    print(cp.parse("π1 *`SUP`8`LO`(*1+2π`SUP`2`LO`) A-I`SUP`8`LO`", use_parselist=True))
 
 
 
