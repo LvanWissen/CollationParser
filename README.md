@@ -1,7 +1,9 @@
 # CollationParser
-STCN Collation Parser
+STCN Collation Parser [=Vellenteller]
 
-Demo and flask webserver available in [separate repository](https://github.com/LvanWissen/collatieparser-docker). Presented at NBV 2018, June 1st 2018, Vrije Universiteit Amsterdam. 
+Presented at NBV 2018, June 1st 2018, Vrije Universiteit Amsterdam. 
+
+~~Demo and flask webserver available in [separate repository](https://github.com/LvanWissen/collatieparser-docker)~~ (deprecated)
 
 ## Questions / requests / bugs?
 [E-mail](mailto:leon@vwissen.nl)! 
@@ -26,26 +28,29 @@ Or for a more informative output:
 
 Output:
 ```
-{'FORMAAT': '4', 'KATERN_START': '*'}
-4
+{'KATERN_START': '*', 'FORMAAT': '4'}
+Cumulatief aantal: 4
+---
 
 {'CORRECTIE': '-*4'}
-3
+Cumulatief aantal: 3
+---
 
-{'FORMAAT': '12', 'KATERN_END': 'G', 'KATERN_START': 'A'}
-n_start: 1 s_start: A
-n_end: 1 s_end: G
-method1
-12 7
-87
+{'KATERN_START': 'A', 'KATERN_END': 'G', 'FORMAAT': '12'}
+n_start: 1 	 s_start: A
+n_end: 1 	 s_end: G
+Method: Begin and end collation mark
+Formaat: 12	Omvang:7
+Cumulatief aantal: 87
+---
 
-{'FORMAAT': '8', 'KATERN_START': 'H'}
-95
+{'KATERN_START': 'H', 'FORMAAT': '8'}
+Cumulatief aantal: 95
+---
 
 {'COMMENTAAR': 'H8 blank'}
 Commentaar: H8 blank
-95
-Folia: 95
+Cumulatief aantal: 95
 
 ```
 
@@ -57,208 +62,280 @@ python .\collationParser.py
 π1 †-3†`SUP`12`LO` *`SUP`2`LO` a-e`SUP`12`LO` A-K`SUP`12`LO` `SUP`2`LO`†`SUP`2`LO` χ1 L-2C`SUP`12`LO` 2D`SUP`2`LO` 2χ1 2E-3D`SUP`12`LO` 3E`SUP`4`LO` `SUP`2`LO`A`SUP`2`LO` 3χ1 3F`SUP`8`LO` 3G-4B`SUP`12`LO` 4C`SUP`4`LO` `SUP`2`LO`*`SUP`2`LO` 4χ1 4D`SUP`8`LO` 4E-4Z`SUP`12`LO` 5A`SUP`2`LO` 5χ1 5B-5S`SUP`12`LO` 5T`SUP`4`LO` `SUP`3`LO`*`SUP`2`LO` 6χ1 5V`SUP`8`LO` 5X-6X`SUP`12`LO` 6Y`SUP`4`LO` 6Z`SUP`2`LO` 7χ1 7A-7S`SUP`12`LO` 7T`SUP`6`LO` `SUP`4`LO`*`SUP`2`LO` 8χ1 7V`SUP`6`LO` 7X-8I`SUP`12`LO` 8K`SUP`10`LO` `SUP`5`LO`*`SUP`2`LO` 9χ1 8L`SUP`2`LO` 8M-9D`SUP`12`LO` 9E`SUP`10`LO` 10χ1 11χ1 9G`SUP`2`LO` 9H-9V`SUP`12`LO` 9X`SUP`4`LO` (3E4, 9X4 blank)
 
 {'ONGESIGNEERD': 'π1'}
-1
+Cumulatief aantal: 1
+---
 
-{'FORMAAT': '12', 'KATERN_END': '3†', 'KATERN_START': '†'}
-n_start: 1 s_start: †
-n_end: 3 s_end: †
-method2
-12 3
-37
+{'KATERN_START': '†', 'KATERN_END': '3†', 'FORMAAT': '12'}
+n_start: 1 	 s_start: †
+n_end: 3 	 s_end: †
+Method: Just one collation mark in group
+Formaat: 12	Omvang:3
+Cumulatief aantal: 37
+---
 
-{'FORMAAT': '2', 'KATERN_START': '*'}
-39
+{'KATERN_START': '*', 'FORMAAT': '2'}
+Cumulatief aantal: 39
+---
 
-{'FORMAAT': '12', 'KATERN_END': 'e', 'KATERN_START': 'a'}
-n_start: 1 s_start: a
-n_end: 1 s_end: e
-method1
-12 5
-99
+{'KATERN_START': 'a', 'KATERN_END': 'e', 'FORMAAT': '12'}
+n_start: 1 	 s_start: a
+n_end: 1 	 s_end: e
+Method: Begin and end collation mark
+Formaat: 12	Omvang:5
+Cumulatief aantal: 99
+---
 
-{'FORMAAT': '12', 'KATERN_END': 'K', 'KATERN_START': 'A'}
-n_start: 1 s_start: A
-n_end: 1 s_end: K
-method1
-12 10
-219
+{'KATERN_START': 'A', 'KATERN_END': 'K', 'FORMAAT': '12'}
+n_start: 1 	 s_start: A
+n_end: 1 	 s_end: K
+Method: Begin and end collation mark
+Formaat: 12	Omvang:10
+Cumulatief aantal: 219
+---
 
-{'FORMAAT': '2', 'HERHALING': '2', 'KATERN_START': '†'}
-221
+{'HERHALING': '2', 'KATERN_START': '†', 'FORMAAT': '2'}
+Cumulatief aantal: 221
+---
 
 {'ONGESIGNEERD': 'χ1'}
-222
+Cumulatief aantal: 222
+---
 
-{'FORMAAT': '12', 'KATERN_END': '2C', 'KATERN_START': 'L'}
-n_start: 1 s_start: L
-n_end: 2 s_end: C
-method3
-12 17
-426
+{'KATERN_START': 'L', 'KATERN_END': '2C', 'FORMAAT': '12'}
+n_start: 1 	 s_start: L
+n_end: 2 	 s_end: C
+Start index: 10 
+End index: 2
+Method: Group exceeds the alphabet and starts over
+Formaat: 12	Omvang:16
+Cumulatief aantal: 414
+---
 
-{'FORMAAT': '2', 'KATERN_START': '2D'}
-428
+{'KATERN_START': '2D', 'FORMAAT': '2'}
+Cumulatief aantal: 416
+---
 
 {'ONGESIGNEERD': '2χ1'}
-429
+Cumulatief aantal: 417
+---
 
-{'FORMAAT': '12', 'KATERN_END': '3D', 'KATERN_START': '2E'}
-n_start: 2 s_start: E
-n_end: 3 s_end: D
-method3
-12 24
-717
+{'KATERN_START': '2E', 'KATERN_END': '3D', 'FORMAAT': '12'}
+n_start: 2 	 s_start: E
+n_end: 3 	 s_end: D
+Start index: 4 
+End index: 3
+Method: Group exceeds the alphabet and starts over
+Formaat: 12	Omvang:23
+Cumulatief aantal: 693
+---
 
-{'FORMAAT': '4', 'KATERN_START': '3E'}
-721
+{'KATERN_START': '3E', 'FORMAAT': '4'}
+Cumulatief aantal: 697
+---
 
-{'FORMAAT': '2', 'HERHALING': '2', 'KATERN_START': 'A'}
-723
+{'HERHALING': '2', 'KATERN_START': 'A', 'FORMAAT': '2'}
+Cumulatief aantal: 699
+---
 
 {'ONGESIGNEERD': '3χ1'}
-724
+Cumulatief aantal: 700
+---
 
-{'FORMAAT': '8', 'KATERN_START': '3F'}
-732
+{'KATERN_START': '3F', 'FORMAAT': '8'}
+Cumulatief aantal: 708
+---
 
-{'FORMAAT': '12', 'KATERN_END': '4B', 'KATERN_START': '3G'}
-n_start: 3 s_start: G
-n_end: 4 s_end: B
-method3
-12 20
-972
+{'KATERN_START': '3G', 'KATERN_END': '4B', 'FORMAAT': '12'}
+n_start: 3 	 s_start: G
+n_end: 4 	 s_end: B
+Start index: 6 
+End index: 1
+Method: Group exceeds the alphabet and starts over
+Formaat: 12	Omvang:19
+Cumulatief aantal: 936
+---
 
-{'FORMAAT': '4', 'KATERN_START': '4C'}
-976
+{'KATERN_START': '4C', 'FORMAAT': '4'}
+Cumulatief aantal: 940
+---
 
-{'FORMAAT': '2', 'HERHALING': '2', 'KATERN_START': '*'}
-978
+{'HERHALING': '2', 'KATERN_START': '*', 'FORMAAT': '2'}
+Cumulatief aantal: 942
+---
 
 {'ONGESIGNEERD': '4χ1'}
-979
+Cumulatief aantal: 943
+---
 
-{'FORMAAT': '8', 'KATERN_START': '4D'}
-987
+{'KATERN_START': '4D', 'FORMAAT': '8'}
+Cumulatief aantal: 951
+---
 
-{'FORMAAT': '12', 'KATERN_END': '4Z', 'KATERN_START': '4E'}
-n_start: 4 s_start: E
-n_end: 4 s_end: Z
-method3
-12 20
-1227
+{'KATERN_START': '4E', 'KATERN_END': '4Z', 'FORMAAT': '12'}
+n_start: 4 	 s_start: E
+n_end: 4 	 s_end: Z
+Start index: 4 
+End index: 22
+Method: Group exceeds the alphabet and starts over
+Formaat: 12	Omvang:19
+Cumulatief aantal: 1179
+---
 
-{'FORMAAT': '2', 'KATERN_START': '5A'}
-1229
+{'KATERN_START': '5A', 'FORMAAT': '2'}
+Cumulatief aantal: 1181
+---
 
 {'ONGESIGNEERD': '5χ1'}
-1230
+Cumulatief aantal: 1182
+---
 
-{'FORMAAT': '12', 'KATERN_END': '5S', 'KATERN_START': '5B'}
-n_start: 5 s_start: B
-n_end: 5 s_end: S
-method3
-12 17
-1434
+{'KATERN_START': '5B', 'KATERN_END': '5S', 'FORMAAT': '12'}
+n_start: 5 	 s_start: B
+n_end: 5 	 s_end: S
+Start index: 1 
+End index: 17
+Method: Group exceeds the alphabet and starts over
+Formaat: 12	Omvang:17
+Cumulatief aantal: 1386
+---
 
-{'FORMAAT': '4', 'KATERN_START': '5T'}
-1438
+{'KATERN_START': '5T', 'FORMAAT': '4'}
+Cumulatief aantal: 1390
+---
 
-{'FORMAAT': '2', 'HERHALING': '3', 'KATERN_START': '*'}
-1440
+{'HERHALING': '3', 'KATERN_START': '*', 'FORMAAT': '2'}
+Cumulatief aantal: 1392
+---
 
 {'ONGESIGNEERD': '6χ1'}
-1441
+Cumulatief aantal: 1393
+---
 
-{'FORMAAT': '8', 'KATERN_START': '5V'}
-1449
+{'KATERN_START': '5V', 'FORMAAT': '8'}
+Cumulatief aantal: 1401
+---
 
-{'FORMAAT': '12', 'KATERN_END': '6X', 'KATERN_START': '5X'}
-n_start: 5 s_start: X
-n_end: 6 s_end: X
-method3
-12 24
-1737
+{'KATERN_START': '5X', 'KATERN_END': '6X', 'FORMAAT': '12'}
+n_start: 5 	 s_start: X
+n_end: 6 	 s_end: X
+Start index: 20 
+End index: 20
+Method: Group exceeds the alphabet and starts over
+Formaat: 12	Omvang:24
+Cumulatief aantal: 1689
+---
 
-{'FORMAAT': '4', 'KATERN_START': '6Y'}
-1741
+{'KATERN_START': '6Y', 'FORMAAT': '4'}
+Cumulatief aantal: 1693
+---
 
-{'FORMAAT': '2', 'KATERN_START': '6Z'}
-1743
+{'KATERN_START': '6Z', 'FORMAAT': '2'}
+Cumulatief aantal: 1695
+---
 
 {'ONGESIGNEERD': '7χ1'}
-1744
+Cumulatief aantal: 1696
+---
 
-{'FORMAAT': '12', 'KATERN_END': '7S', 'KATERN_START': '7A'}
-n_start: 7 s_start: A
-n_end: 7 s_end: S
-method3
-12 18
-1960
+{'KATERN_START': '7A', 'KATERN_END': '7S', 'FORMAAT': '12'}
+n_start: 7 	 s_start: A
+n_end: 7 	 s_end: S
+Start index: 0 
+End index: 17
+Method: Group exceeds the alphabet and starts over
+Formaat: 12	Omvang:18
+Cumulatief aantal: 1912
+---
 
-{'FORMAAT': '6', 'KATERN_START': '7T'}
-1966
+{'KATERN_START': '7T', 'FORMAAT': '6'}
+Cumulatief aantal: 1918
+---
 
-{'FORMAAT': '2', 'HERHALING': '4', 'KATERN_START': '*'}
-1968
+{'HERHALING': '4', 'KATERN_START': '*', 'FORMAAT': '2'}
+Cumulatief aantal: 1920
+---
 
 {'ONGESIGNEERD': '8χ1'}
-1969
+Cumulatief aantal: 1921
+---
 
-{'FORMAAT': '6', 'KATERN_START': '7V'}
-1975
+{'KATERN_START': '7V', 'FORMAAT': '6'}
+Cumulatief aantal: 1927
+---
 
-{'FORMAAT': '12', 'KATERN_END': '8I', 'KATERN_START': '7X'}
-n_start: 7 s_start: X
-n_end: 8 s_end: I
-method3
-12 12
-2119
+{'KATERN_START': '7X', 'KATERN_END': '8I', 'FORMAAT': '12'}
+n_start: 7 	 s_start: X
+n_end: 8 	 s_end: I
+Start index: 20 
+End index: 8
+Method: Group exceeds the alphabet and starts over
+Formaat: 12	Omvang:12
+Cumulatief aantal: 2071
+---
 
-{'FORMAAT': '10', 'KATERN_START': '8K'}
-2129
+{'KATERN_START': '8K', 'FORMAAT': '10'}
+Cumulatief aantal: 2081
+---
 
-{'FORMAAT': '2', 'HERHALING': '5', 'KATERN_START': '*'}
-2131
+{'HERHALING': '5', 'KATERN_START': '*', 'FORMAAT': '2'}
+Cumulatief aantal: 2083
+---
 
 {'ONGESIGNEERD': '9χ1'}
-2132
+Cumulatief aantal: 2084
+---
 
-{'FORMAAT': '2', 'KATERN_START': '8L'}
-2134
+{'KATERN_START': '8L', 'FORMAAT': '2'}
+Cumulatief aantal: 2086
+---
 
-{'FORMAAT': '12', 'KATERN_END': '9D', 'KATERN_START': '8M'}
-n_start: 8 s_start: M
-n_end: 9 s_end: D
-method3
-12 17
-2338
+{'KATERN_START': '8M', 'KATERN_END': '9D', 'FORMAAT': '12'}
+n_start: 8 	 s_start: M
+n_end: 9 	 s_end: D
+Start index: 11 
+End index: 3
+Method: Group exceeds the alphabet and starts over
+Formaat: 12	Omvang:16
+Cumulatief aantal: 2278
+---
 
-{'FORMAAT': '10', 'KATERN_START': '9E'}
-2348
+{'KATERN_START': '9E', 'FORMAAT': '10'}
+Cumulatief aantal: 2288
+---
 
 {'ONGESIGNEERD': '10χ1'}
-2349
+Cumulatief aantal: 2289
+---
 
 {'ONGESIGNEERD': '11χ1'}
-2350
+Cumulatief aantal: 2290
+---
 
-{'FORMAAT': '2', 'KATERN_START': '9G'}
-2352
+{'KATERN_START': '9G', 'FORMAAT': '2'}
+Cumulatief aantal: 2292
+---
 
-{'FORMAAT': '12', 'KATERN_END': '9V', 'KATERN_START': '9H'}
-n_start: 9 s_start: H
-n_end: 9 s_end: V
-method3
-12 14
-2520
+{'KATERN_START': '9H', 'KATERN_END': '9V', 'FORMAAT': '12'}
+n_start: 9 	 s_start: H
+n_end: 9 	 s_end: V
+Start index: 7 
+End index: 19
+Method: Group exceeds the alphabet and starts over
+Formaat: 12	Omvang:13
+Cumulatief aantal: 2448
+---
 
-{'FORMAAT': '4', 'KATERN_START': '9X'}
-2524
+{'KATERN_START': '9X', 'FORMAAT': '4'}
+Cumulatief aantal: 2452
+---
 
 {'COMMENTAAR': '3E4, 9X4 blank'}
 Commentaar: 3E4, 9X4 blank
-2524
-Folia: 2524
+Cumulatief aantal: 2452
+---
+
+Folia: 2452
+
 
 
 ```
