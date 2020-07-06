@@ -54,29 +54,7 @@ class CollationParser:
         decodestring = "abcdefghiklmnopqrstvxyz"  # j, u and w removed
         self.decodestring = decodestring + decodestring.upper()
 
-    def parse(self, s, use_parselist=False):
-        """
-        Parse function. Call with collation formula (string) as argument. It
-        returns the amount of folia. Or specify `use_parselist` if you want
-        more information on the individual collates. Then the output is a
-        tuple of folia, parselist (list with dicts).
-
-        :param s: collation formula (str)
-        :param parselist:   return parselist with parse information (e.g. for
-                            web interface or debug) as second variable in
-                            return statement. (default False)
-        :return: amount of folia (int)
-        """
-
-        folia = 0
-
-        # To keep track of collates and sizes
-        parselist = []
-
-        logging.info(s)
-
-
-        r = re.compile(
+        self.r = re.compile(
             r"""
 # Met informatie erbij
   
@@ -99,17 +77,47 @@ class CollationParser:
 (?:\((?P<TOEVOEGING>[^()]*?\+[^()]*?)\))|
 
 # Er kunnen ook losse gesigneerde bladen zijn
-(?:(?P<GESIGNEERDE_LOSSE_BLADEN>(?P<KATERN_START_LOS>[^# `\"\n]+?)(?:-(?P<KATERN_END_LOS>[^ `\n]+?))?))1|
+(?:(?P<GESIGNEERDE_LOSSE_BLADEN>(?P<KATERN_START_LOS>[^# `\"\n]+?)(?:-(?P<KATERN_END_LOS>[^ `\n]+?))?))(<!\(\w{1,2})1(?![\d-])|
 
 # Eventueel is er een correctienotatie, waarbij een blad van een katern ontbreekt.
 (?:\((?P<CORRECTIE>-.*?)\))|
 
 # En als er nog commentaar toegevoegd is, dan wordt dat ook meegenomen. 
-(?:\((?P<COMMENTAAR>[^-+]*?)\))
+(?:\((?P<COMMENTAAR>[^+]*?)\))
             """, re.VERBOSE
             )
 
-        entries = [m.groupdict() for m in r.finditer(s)]
+    def parse(self, s, use_parselist=False):
+        """
+        Parse function. Call with collation formula (string) as argument. It
+        returns the amount of folia. Or specify `use_parselist` if you want
+        more information on the individual collates. Then the output is a
+        tuple of folia, parselist (list with dicts).
+
+        :param s: collation formula (str)
+        :param parselist:   return parselist with parse information (e.g. for
+                            web interface or debug) as second variable in
+                            return statement. (default False)
+        :return: amount of folia (int)
+        """
+
+        folia = 0
+
+        # To keep track of collates and sizes
+        parselist = []
+
+        logging.info(s)
+
+        # some tricks
+        if '(-)' in s:
+            s = s.replace('(-)', '(*)')
+
+        if ' and ' in s:
+            s, s_extra = s.split(' and ', 1)
+        else:
+            s_extra = None
+        
+        entries = [m.groupdict() for m in self.r.finditer(s)]
 
         for e in entries:
             size = 0
@@ -271,7 +279,15 @@ class CollationParser:
                     except ValueError:
                         size = int(re.split(r'[χ*π\[a-zA-Z\]]+', e['ONGESIGNEERD'].split(',')[0], 1)[1])
                 else:
-                    size = int(re.split(r'[χ*π\[a-zA-Z\]]+', e['ONGESIGNEERD'], 1)[1])
+                    size = re.split(r'[χ*π\[a-zA-Z\]]+', e['ONGESIGNEERD'], 1)[1]
+
+                    if size.endswith('1'):
+                        size = 1
+                    elif size.isnumeric():
+                        size = int(size)
+                    else:
+                        size = 0
+                        logging.info('Cannot parse {s} ({e}'.format(s=s, e=e))
 
                 folia += size
                 e['OMVANG'] = size
@@ -288,6 +304,11 @@ class CollationParser:
                     folia += size
 
                     logging.debug('Method: Begin and end collation mark of unsigned leaves')
+
+                elif e['KATERN_START_LOS']:
+                    size = 1
+
+                    folia += size
 
             elif e['TOEVOEGING']:
 
@@ -331,6 +352,9 @@ class CollationParser:
 
         logging.info("\nFolia: {}".format(folia))
 
+        if s_extra:
+            pass  # TODO?
+
         if use_parselist:
             return folia, parselist
         else:
@@ -348,7 +372,7 @@ if __name__ == "__main__":
 
     # print(cp.parse("[*]1 2*1 3*1 and 67 engraved folia",  use_parselist=True))
 
-    print(cp.parse("π1 *`SUP`8`LO`(*1+2π`SUP`2`LO`) A-I`SUP`8`LO`", use_parselist=True))
+    print(cp.parse("A-H`SUP`12`LO` (H12 blank)", use_parselist=True))
 
 
 
