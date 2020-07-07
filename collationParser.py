@@ -116,7 +116,14 @@ class CollationParser:
             s, s_extra = s.split(' and ', 1)
         else:
             s_extra = None
-        
+
+        if '*1' in s:
+            s = re.sub(r'\*1(?![,\d])', '*`SUP`1`LO`', s)
+        if ']1' in s:
+            s = s.replace(']1', ']`SUP`1`LO`')
+
+        logging.info(s)
+
         entries = [m.groupdict() for m in self.r.finditer(s)]
 
         for e in entries:
@@ -182,7 +189,7 @@ class CollationParser:
                             letters = decodestring[decodestring.index(s_start.lower()):decodestring.index(s_end.lower()) + 1]
                     elif n_end > n_start:
                         if s_start == s_end and ('*' in s_start or s_start == ''):
-                            letters = '*' * (n_end - n_start)
+                            letters = '*' * (n_end - n_start + 1)
                         else:
                             letters = decodestring[decodestring.index(s_start.lower()):] + decodestring * (n_end - n_start -1) + decodestring[:decodestring.index(s_end.lower())+1]
                     elif n_end < n_start and n_end == 0:
@@ -372,8 +379,9 @@ if __name__ == "__main__":
 
     # print(cp.parse("[*]1 2*1 3*1 and 67 engraved folia",  use_parselist=True))
 
-    print(cp.parse("π1 †-3†`SUP`12`LO` *`SUP`2`LO` a-e`SUP`12`LO` A-K`SUP`12`LO` `SUP`2`LO`†`SUP`2`LO` χ1 L-2C`SUP`12`LO` 2D`SUP`2`LO` 2χ1 2E-3D`SUP`12`LO` 3E`SUP`4`LO` `SUP`2`LO`A`SUP`2`LO` 3χ1 3F`SUP`8`LO` 3G-4B`SUP`12`LO` 4C`SUP`4`LO` `SUP`2`LO`*`SUP`2`LO` 4χ1 4D`SUP`8`LO` 4E-4Z`SUP`12`LO` 5A`SUP`2`LO` 5χ1 5B-5S`SUP`12`LO` 5T`SUP`4`LO` `SUP`3`LO`*`SUP`2`LO` 6χ1 5V`SUP`8`LO` 5X-6X`SUP`12`LO` 6Y`SUP`4`LO` 6Z`SUP`2`LO` 7χ1 7A-7S`SUP`12`LO` 7T`SUP`6`LO` `SUP`4`LO`*`SUP`2`LO` 8χ1 7V`SUP`6`LO` 7X-8I`SUP`12`LO` 8K`SUP`10`LO` `SUP`5`LO`*`SUP`2`LO` 9χ1 8L`SUP`2`LO` 8M-9D`SUP`12`LO` 9E`SUP`10`LO` 10χ1 11χ1 9G`SUP`2`LO` 9H-9V`SUP`12`LO` 9X`SUP`4`LO` (3E4, 9X4 blank)", use_parselist=True))
+    #print(cp.parse("π1 †-3†`SUP`12`LO` *`SUP`2`LO` a-e`SUP`12`LO` A-K`SUP`12`LO` `SUP`2`LO`†`SUP`2`LO` χ1 L-2C`SUP`12`LO` 2D`SUP`2`LO` 2χ1 2E-3D`SUP`12`LO` 3E`SUP`4`LO` `SUP`2`LO`A`SUP`2`LO` 3χ1 3F`SUP`8`LO` 3G-4B`SUP`12`LO` 4C`SUP`4`LO` `SUP`2`LO`*`SUP`2`LO` 4χ1 4D`SUP`8`LO` 4E-4Z`SUP`12`LO` 5A`SUP`2`LO` 5χ1 5B-5S`SUP`12`LO` 5T`SUP`4`LO` `SUP`3`LO`*`SUP`2`LO` 6χ1 5V`SUP`8`LO` 5X-6X`SUP`12`LO` 6Y`SUP`4`LO` 6Z`SUP`2`LO` 7χ1 7A-7S`SUP`12`LO` 7T`SUP`6`LO` `SUP`4`LO`*`SUP`2`LO` 8χ1 7V`SUP`6`LO` 7X-8I`SUP`12`LO` 8K`SUP`10`LO` `SUP`5`LO`*`SUP`2`LO` 9χ1 8L`SUP`2`LO` 8M-9D`SUP`12`LO` 9E`SUP`10`LO` 10χ1 11χ1 9G`SUP`2`LO` 9H-9V`SUP`12`LO` 9X`SUP`4`LO` (3E4, 9X4 blank)", use_parselist=True))
 
+    print(cp.parse("π1 *`SUP`12`LO`(-*12) A-O`SUP`12`LO` (O12 blank)", use_parselist=True))
 
 
 
