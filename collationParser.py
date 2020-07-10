@@ -65,7 +65,7 @@ class CollationParser:
 (?:`SUP`(?P<DUBBEL>[χπ]+?)`LO`(?P<DUBBELKATERN>[^\d\s]+?) )?(?:`SUP`(?P<HERHALING>[\dχπ]+?)`LO`)?
 
 # Zoek daarna naar een normaal katern met een startletter en mogelijk een eindletter. 
-(?P<KATERN_START>(?:[^ `\"\n]+?)|(?:\)\())(?:-(?P<KATERN_END>[^ `\n]+?))?
+(?P<KATERN_START>(?:[^ `#\"\n]+?)|(?:\)\())(?:-(?P<KATERN_END>[^ `\n]+?))?
 
 # Dit wordt altijd afgesloten met een formaatnotatie die bestaat uit één of meerdere cijfers.
 (?:`SUP`(?P<FORMAAT>(?:\d+?)|
@@ -381,7 +381,7 @@ if __name__ == "__main__":
 
     #print(cp.parse("π1 †-3†`SUP`12`LO` *`SUP`2`LO` a-e`SUP`12`LO` A-K`SUP`12`LO` `SUP`2`LO`†`SUP`2`LO` χ1 L-2C`SUP`12`LO` 2D`SUP`2`LO` 2χ1 2E-3D`SUP`12`LO` 3E`SUP`4`LO` `SUP`2`LO`A`SUP`2`LO` 3χ1 3F`SUP`8`LO` 3G-4B`SUP`12`LO` 4C`SUP`4`LO` `SUP`2`LO`*`SUP`2`LO` 4χ1 4D`SUP`8`LO` 4E-4Z`SUP`12`LO` 5A`SUP`2`LO` 5χ1 5B-5S`SUP`12`LO` 5T`SUP`4`LO` `SUP`3`LO`*`SUP`2`LO` 6χ1 5V`SUP`8`LO` 5X-6X`SUP`12`LO` 6Y`SUP`4`LO` 6Z`SUP`2`LO` 7χ1 7A-7S`SUP`12`LO` 7T`SUP`6`LO` `SUP`4`LO`*`SUP`2`LO` 8χ1 7V`SUP`6`LO` 7X-8I`SUP`12`LO` 8K`SUP`10`LO` `SUP`5`LO`*`SUP`2`LO` 9χ1 8L`SUP`2`LO` 8M-9D`SUP`12`LO` 9E`SUP`10`LO` 10χ1 11χ1 9G`SUP`2`LO` 9H-9V`SUP`12`LO` 9X`SUP`4`LO` (3E4, 9X4 blank)", use_parselist=True))
 
-    print(cp.parse("π1 *`SUP`12`LO`(-*12) A-O`SUP`12`LO` (O12 blank)", use_parselist=True))
+    print(cp.parse("1#?-3?`SUP`4`LO` A-2Z`SUP`4`LO` 2#A-Y`SUP`4`LO` Z`SUP`2`LO` 2A-2L`SUP`4`LO` 2M`SUP`2`LO` 3#A-2I`SUP`4`LO` 4#A-V`SUP`4`LO`", use_parselist=True))
 
 
 
