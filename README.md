@@ -1,12 +1,10 @@
 # CollationParser
+[![GitHub release](https://img.shields.io/github/release/LvanWissen/CollationParser.svg)](https://gitHub.com/lvanwissen/CollationParser/releases/)
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.3938878.svg)](https://doi.org/10.5281/zenodo.3938878)
+
 STCN Collation Parser [=Vellenteller]
 
 Presented at NBV 2018, June 1st 2018, Vrije Universiteit Amsterdam. 
-
-~~Demo and flask webserver available in [separate repository](https://github.com/LvanWissen/collatieparser-docker)~~ (deprecated)
-
-## Questions / requests / bugs?
-[E-mail](mailto:leon@vwissen.nl)! 
 
 ## How to use
 
@@ -336,6 +334,12 @@ Cumulatief aantal: 2452
 
 Folia: 2452
 
-
-
 ```
+
+
+## Docker demo
+
+~~Demo and flask webserver available in [separate repository](https://github.com/LvanWissen/collatieparser-docker)~~ (deprecated)
+
+## Questions / requests / bugs?
+[E-mail](mailto:leon@vwissen.nl)! 
